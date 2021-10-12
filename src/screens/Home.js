@@ -26,7 +26,7 @@ const reducer = (state, action) => {
 
   let newState = {};
 
-  newState.actionQueue = [...state.actionQueue, type];
+  newState.actionQueue = [...state.actionQueue, action];
 
   if (type === "is-play-true") {
     newState.triggerDoOnceActions = true;
@@ -118,9 +118,19 @@ const Home = () => {
     PlayerController.unmute();
     const playerStatus = PlayerController.getPlayerStatus();
     if (playerStatus.isMuted) {
-      dispatch({ type: "is-muted-true" });
+      dispatch({
+        type: "is-muted-true",
+        payload: {
+          isMuted: playerStatus.isMuted,
+        },
+      });
     } else {
-      dispatch({ type: "is-muted-false" });
+      dispatch({
+        type: "is-muted-false",
+        payload: {
+          isMuted: playerStatus.isMuted,
+        },
+      });
     }
   }, [PlayerController]);
 
@@ -238,8 +248,11 @@ const Home = () => {
 
       {/* LABEL 2 */}
       <h2>Event Qeueue :</h2>
-      {state.actionQueue.map((actionTypeName, index) => (
-        <p key={actionTypeName + index}>{actionTypeName}</p>
+      {state.actionQueue.map((action, index) => (
+        <div key={action.type + index}>
+          <p>{action.type}</p>
+          <p>{JSON.stringify(action.payload)}</p>
+        </div>
       ))}
     </>
   );
