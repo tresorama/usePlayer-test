@@ -42,11 +42,11 @@ const reducer = (state, action) => {
     newState.showFullscreen = false;
   }
   if (type === "is-muted-true") {
-    newState.showUnmute = false;
+    newState.showUnmute = true;
     newState.videoIsMuted = true;
   }
   if (type === "is-muted-false") {
-    newState.showUnmute = true;
+    newState.showUnmute = false;
     newState.videoIsMuted = false;
   }
 
