@@ -115,21 +115,18 @@ const Home = () => {
   }, [PlayerController]);
 
   const doUnmute = useCallback(async () => {
+    const before = PlayerController.getPlayerStatus();
     PlayerController.unmute();
     const playerStatus = PlayerController.getPlayerStatus();
     if (playerStatus.isMuted) {
       dispatch({
         type: "is-muted-true",
-        payload: {
-          isMuted: playerStatus.isMuted,
-        },
+        payload: { before, playerStatus },
       });
     } else {
       dispatch({
         type: "is-muted-false",
-        payload: {
-          isMuted: playerStatus.isMuted,
-        },
+        payload: { before, playerStatus },
       });
     }
   }, [PlayerController]);
@@ -248,10 +245,10 @@ const Home = () => {
 
       {/* LABEL 2 */}
       <h2>Event Qeueue :</h2>
-      {state.actionQueue.map((action, index) => (
-        <div key={action.type + index}>
-          <p>{action.type}</p>
-          <p>{JSON.stringify(action.payload)}</p>
+      {state.actionQueue.map(({ type, ...rest }, index) => (
+        <div key={type + index}>
+          <p>{type}</p>
+          <p>{JSON.stringify(rest)}</p>
         </div>
       ))}
     </>
