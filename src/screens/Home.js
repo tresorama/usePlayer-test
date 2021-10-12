@@ -16,7 +16,9 @@ const initialState = {
   isFullscreenNow: false,
   //
   triggerDoOnceActions: false,
+  // flags
   playSuccessHappened: false,
+  suspendedHapppened: false,
   // dev only
   actionQueue: [],
 };
@@ -58,8 +60,9 @@ const reducer = (state, action) => {
   }
 
   if (type === "player-suspended") {
-    if (state.playSuccessHappened) {
+    if (state.playSuccessHappened && !state.suspendedHapppened) {
       newState.showPlay = true;
+      newState.suspendedHapppened = true;
     }
   }
 
