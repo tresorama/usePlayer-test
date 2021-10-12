@@ -155,10 +155,12 @@ const Home = () => {
 
   React.useEffect(() => {
     if (state.triggerDoOnceActions) {
-      dispatch({ type: "do-once-start" });
-      doOnceUnmute();
-      doOnceToggleFullScreen();
-      dispatch({ type: "do-once-done" });
+      waitFor(4000).then(() => {
+        dispatch({ type: "do-once-start" });
+        doOnceUnmute();
+        doOnceToggleFullScreen();
+        dispatch({ type: "do-once-done" });
+      });
     }
   }, [state.triggerDoOnceActions, doOnceUnmute, doOnceToggleFullScreen]);
 
