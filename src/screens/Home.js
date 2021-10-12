@@ -96,7 +96,7 @@ const Home = () => {
   });
 
   const bodyRef = useRef(window.document.body);
-  const [isInFullscrenNow, toggleFullScreen, enableFullScreen] = useFullscreen(bodyRef);
+  const [isInFullscrenNow, toggleFullScreen] = useFullscreen(bodyRef);
 
   /* =================================================== 
         ACTIONS
