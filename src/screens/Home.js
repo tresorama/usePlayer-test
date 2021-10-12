@@ -115,19 +115,12 @@ const Home = () => {
   }, [PlayerController]);
 
   const doUnmute = useCallback(async () => {
-    const before = PlayerController.getPlayerStatus();
     PlayerController.unmute();
     const playerStatus = PlayerController.getPlayerStatus();
     if (playerStatus.isMuted) {
-      dispatch({
-        type: "is-muted-true",
-        payload: { before, playerStatus },
-      });
+      dispatch({ type: "is-muted-true" });
     } else {
-      dispatch({
-        type: "is-muted-false",
-        payload: { before, playerStatus },
-      });
+      dispatch({ type: "is-muted-false" });
     }
   }, [PlayerController]);
 
@@ -149,9 +142,18 @@ const Home = () => {
   const doOnceUnmute = useCallback(async () => {
     if (!onceUnmuteDone.current) {
       onceUnmuteDone.current = true;
-      doUnmute();
+      const playerStatus = await PlayerController.unmutePlayingVideo();
+      const { isPlaying, isMuted } = playerStatus;
+      if (!isPlaying) {
+        dispatch({ type: "is-play-false" });
+      }
+      if (isMuted) {
+        dispatch({ type: "is-muted-true" });
+      } else {
+        dispatch({ type: "is-muted-false" });
+      }
     }
-  }, [doUnmute]);
+  }, [PlayerController]);
 
   const doOnceToggleFullScreen = useCallback(async () => {
     if (!onceFullscreenDone.current) {
