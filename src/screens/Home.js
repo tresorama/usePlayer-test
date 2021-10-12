@@ -16,8 +16,9 @@ const initialState = {
   isFullscreenNow: false,
   //
   triggerDoOnceActions: false,
-  // // dev only
-  // actionQueue: [],
+  playSuccessHappened: false,
+  // dev only
+  actionQueue: [],
 };
 
 const reducer = (state, action) => {
@@ -27,6 +28,7 @@ const reducer = (state, action) => {
 
   if (type === "is-play-true") {
     newState.triggerDoOnceActions = true;
+    newState.playSuccessHappened = true;
 
     newState.showPlay = false;
     newState.showUnmute = true;
@@ -53,15 +55,17 @@ const reducer = (state, action) => {
     newState.isFullscreenNow = false;
   }
 
-  // if (type === "player-suspended") {
-  // }
+  if (type === "player-suspended") {
+    if (!state.playSuccessHappened) {
+      newState.showPlay = true;
+    }
+  }
+
+  newState.actionQueue = [...state.actionQueue, type];
 
   if (Object.keys(newState).length === 0) {
     throw new Error(`This reducer does not support action : ${type}. Maybe it's a typo !!!`);
   }
-  // else {
-  //   newState.actionQueue = [...state.actionQueue, type ];
-  // }
 
   return { ...state, ...newState };
 };
@@ -89,9 +93,9 @@ const Home = () => {
         }
       },
       onPlaylistItemEnds: () => {},
-      // onMediaSuspend:(PlayerController) => {
-      //   dispatch({type: "player-suspended"});
-      // }
+      onMediaSuspend: (PlayerController) => {
+        dispatch({ type: "player-suspended" });
+      },
     },
   });
 
@@ -227,6 +231,12 @@ const Home = () => {
 
       {/* LABEL */}
       <h1>{labelText}</h1>
+
+      {/* LABEL 2 */}
+      <h2>Event Qeueue :</h2>
+      {state.actionQueue.map((actionTypeName) => (
+        <p>{actionTypeName}</p>
+      ))}
     </>
   );
 };
