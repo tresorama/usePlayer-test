@@ -155,6 +155,7 @@ const Home = () => {
 
   React.useEffect(() => {
     if (state.triggerDoOnceActions) {
+      dispatch({ type: "do-once-start" });
       doOnceUnmute();
       doOnceToggleFullScreen();
       dispatch({ type: "do-once-done" });
@@ -201,7 +202,7 @@ const Home = () => {
 
   return (
     <>
-      {!isReady && <h1> Not Ready</h1>}
+      {!isReady && <h1 style={{ height: "100vh" }}> Page Not Ready</h1>}
 
       {/* LABEL */}
       <h1 onClick={onIntroLayerClick}>COSCIENZA INTUITIVA</h1>
