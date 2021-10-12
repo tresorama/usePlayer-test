@@ -56,7 +56,7 @@ const reducer = (state, action) => {
   }
 
   if (type === "player-suspended") {
-    if (!state.playSuccessHappened) {
+    if (state.playSuccessHappened) {
       newState.showPlay = true;
     }
   }
