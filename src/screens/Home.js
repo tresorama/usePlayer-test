@@ -26,6 +26,8 @@ const reducer = (state, action) => {
 
   let newState = {};
 
+  newState.actionQueue = [...state.actionQueue, type];
+
   if (type === "is-play-true") {
     newState.triggerDoOnceActions = true;
     newState.playSuccessHappened = true;
@@ -60,8 +62,6 @@ const reducer = (state, action) => {
       newState.showPlay = true;
     }
   }
-
-  newState.actionQueue = [...state.actionQueue, type];
 
   if (Object.keys(newState).length === 0) {
     throw new Error(`This reducer does not support action : ${type}. Maybe it's a typo !!!`);
@@ -157,6 +157,7 @@ const Home = () => {
     if (state.triggerDoOnceActions) {
       doOnceUnmute();
       doOnceToggleFullScreen();
+      dispatch({ type: "do-once-done" });
     }
   }, [state.triggerDoOnceActions, doOnceUnmute, doOnceToggleFullScreen]);
 
@@ -234,8 +235,8 @@ const Home = () => {
 
       {/* LABEL 2 */}
       <h2>Event Qeueue :</h2>
-      {state.actionQueue.map((actionTypeName) => (
-        <p>{actionTypeName}</p>
+      {state.actionQueue.map((actionTypeName, index) => (
+        <p key={actionTypeName + index}>{actionTypeName}</p>
       ))}
     </>
   );
